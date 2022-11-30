@@ -1,0 +1,35 @@
+logger:
+    console:
+        level: INFO
+
+cognite:
+    # Read these from environment variables
+    host: ${COGNITE_BASE_URL}
+    project: ${COGNITE_PROJECT}
+
+    idp-authentication:
+        token-url: ${COGNITE_TOKEN_URL}
+        client-id: ${COGNITE_CLIENT_ID}
+        secret: ${COGNITE_CLIENT_SECRET}
+        scopes:
+            - ${COGNITE_BASE_URL}/.default
+
+    extraction-pipeline:
+      external-id: ${EXTRACTION_PIPELINE_EXT_ID}
+
+files:
+  - path: csv_files/oslo.csv
+    key-column: external_id
+    destination:
+      database: src:001:sap:db
+      table: assets
+  - path: csv_files/hannover.csv
+    key-column: external_id
+    destination:
+      database: src:001:sap:db
+      table: assets
+  - path: csv_files/oee.csv
+    key-column: external_id
+    destination:
+      database: uc:001:oee:db
+      table: timeseries
