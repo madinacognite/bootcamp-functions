@@ -1,0 +1,4 @@
+# Example: You need a specific pandas version:
+# pandas==1.2.3
+cognite-extractor-utils>=2.2.0
+

@@ -13,6 +13,10 @@ cognite:
         secret: ${COGNITE_CLIENT_SECRET}
         scopes:
             - ${COGNITE_BASE_URL}/.default
+    
+    extraction-pipeline:
+        external-id: rest-api:oee:datapoints
+
 
 api:
     url: https://ice-cream-factory.inso-internal.cognite.ai

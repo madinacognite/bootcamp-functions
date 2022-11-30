@@ -15,7 +15,7 @@ cognite:
             - ${COGNITE_BASE_URL}/.default
 
     extraction-pipeline:
-      external-id: csv:sap:raw_assets
+      external-id: csv:oee:raw_timeseries
 
 files:
   - path: csv_files/oslo.csv
