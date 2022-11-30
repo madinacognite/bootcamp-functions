@@ -125,9 +125,9 @@ jobs:
         uses: cognitedata/function-action-oidc@v1
         with:
           # Parameters you may likely hardcode here directly:
-          deployment_client_id: 721a76ed-7fd3-4bed-b1e6-27b2f99d3c4d
+          deployment_client_id: 76cbe02f-905b-4ad8-a768-1ad66f105208
           deployment_tenant_id: 16e3985b-ebe8-4e24-9da4-933e21a9fc81
-          schedules_client_id: c59f3f32-4a96-45a5-8c71-5aea66a8b57c
+          schedules_client_id: 76cbe02f-905b-4ad8-a768-1ad66f105208
           schedules_tenant_id: 16e3985b-ebe8-4e24-9da4-933e21a9fc81
           cdf_project: bootcamp-03-test
           cdf_cluster: greenfield
