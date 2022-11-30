@@ -18,17 +18,28 @@ jobs:
         "common"
         )
 
+  # deploy:
+  #   needs: generate-matrix
+  #   name: Deploy to Cognite Functions
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       function: ${{ fromJson(needs.generate-matrix.outputs.folders) }}
+  #       # Add environments to deploy to.
+  #       # Each environment should have a corresponding github environment with secrets.
+  #       environment:
+  #         - test
+
   deploy:
-    needs: generate-matrix
     name: Deploy to Cognite Functions
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        function: ${{ fromJson(needs.generate-matrix.outputs.folders) }}
-        # Add environments to deploy to.
-        # Each environment should have a corresponding github environment with secrets.
-        environment:
-          - test
+        function:
+          - execute_csv_extractor_assets
+          - execute_csv_extractor_timeseries
+          - execute_rest_extractor
+
 
     environment: ${{ matrix.environment }}
 
@@ -80,32 +91,63 @@ jobs:
           echo "extra_secrets_name=EXTRA_SECRETS_${{ matrix.function }}" >> $GITHUB_OUTPUT
         id: extract_secrets
 
-      - name: Deploy and schedule ${{matrix.function }}
-        if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.function) }}
+      # - name: Deploy and schedule ${{matrix.function }}
+      #   if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.function) }}
+      #   uses: cognitedata/function-action-oidc@v1
+      #   with:
+      #     # Parameters you may likely hardcode here directly:
+      #     runtime: py39
+      #     # Parameters we can read/extract automatically:
+      #     function_folder: ${{ matrix.function }}
+      #     function_external_id: ${{ matrix.function }}-${{ steps.extract_branch.outputs.branch }}
+      #     schedule_file: schedules/${{ matrix.environment }}.yaml
+      #     # Parameters we get from Github secret storage:
+      #     deployment_client_id: ${{ secrets.DEPLOYMENT_CLIENT_ID }}
+      #     deployment_client_secret: ${{secrets.DEPLOYMENT_CLIENT_SECRET }}
+      #     schedules_client_id: ${{ secrets.SCHEDULE_CLIENT_ID }}
+      #     schedules_client_secret: ${{ secrets.SCHEDULE_CLIENT_SECRET }}
+      #     function_secrets: ${{ secrets[steps.extract_secrets.outputs.extra_secrets_name] }}
+      #     # Individual parameters per function we read from 'common/functions_config_[environment].yaml', 'function_config.yaml' and 'function_config_[environment].yaml:
+      #     cdf_project: ${{ steps.extract_params.outputs.cdf_project }}
+      #     cdf_cluster: ${{ steps.extract_params.outputs.cdf_cluster }}
+      #     data_set_id: ${{ steps.extract_params.outputs.data_set_id }}
+      #     schedules_tenant_id: ${{ steps.extract_params.outputs.tenant_id }}
+      #     deployment_tenant_id: ${{ steps.extract_params.outputs.tenant_id }}
+      #     common_folder: ${{ steps.extract_params.outputs.common_folder }}
+      #     function_deploy_timeout: ${{ steps.extract_params.outputs.function_deploy_timeout }}
+      #     post_deploy_cleanup: ${{ steps.extract_params.outputs.post_deploy_cleanup }}
+      #     description: ${{ steps.extract_params.outputs.description }}
+      #     owner: ${{ steps.extract_params.outputs.owner }}
+      #     env_vars: ${{ steps.extract_params.outputs.env_vars }}
+      #     metadata: ${{ steps.extract_params.outputs.metadata }}
+
+      - name: Deploy and schedule ${{ matrix.function }}
         uses: cognitedata/function-action-oidc@v1
         with:
           # Parameters you may likely hardcode here directly:
-          runtime: py39
+          deployment_client_id: 721a76ed-7fd3-4bed-b1e6-27b2f99d3c4d
+          deployment_tenant_id: 16e3985b-ebe8-4e24-9da4-933e21a9fc81
+          schedules_client_id: c59f3f32-4a96-45a5-8c71-5aea66a8b57c
+          schedules_tenant_id: 16e3985b-ebe8-4e24-9da4-933e21a9fc81
+          cdf_project: bootcamp-03-test
+          cdf_cluster: greenfield
+          data_set_id: 505192792434293
+          runtime: py38
           # Parameters we can read/extract automatically:
           function_folder: ${{ matrix.function }}
-          function_external_id: ${{ matrix.function }}-${{ steps.extract_branch.outputs.branch }}
-          schedule_file: schedules/${{ matrix.environment }}.yaml
+          function_external_id: ${{ format('{0}_{1}', matrix.function, steps.extract_name.outputs.name) }}
+          schedule_file: schedules/${{steps.extract_name.outputs.name}}.yaml
           # Parameters we get from Github secret storage:
-          deployment_client_id: ${{ secrets.DEPLOYMENT_CLIENT_ID }}
-          deployment_client_secret: ${{secrets.DEPLOYMENT_CLIENT_SECRET }}
-          schedules_client_id: ${{ secrets.SCHEDULE_CLIENT_ID }}
-          schedules_client_secret: ${{ secrets.SCHEDULE_CLIENT_SECRET }}
-          function_secrets: ${{ secrets[steps.extract_secrets.outputs.extra_secrets_name] }}
-          # Individual parameters per function we read from 'common/functions_config_[environment].yaml', 'function_config.yaml' and 'function_config_[environment].yaml:
-          cdf_project: ${{ steps.extract_params.outputs.cdf_project }}
-          cdf_cluster: ${{ steps.extract_params.outputs.cdf_cluster }}
-          data_set_id: ${{ steps.extract_params.outputs.data_set_id }}
-          schedules_tenant_id: ${{ steps.extract_params.outputs.tenant_id }}
-          deployment_tenant_id: ${{ steps.extract_params.outputs.tenant_id }}
+          deployment_client_secret: ${{ secrets[steps.extract_secrets.outputs.deployment_secret] }}
+          schedules_client_secret: ${{ secrets[steps.extract_secrets.outputs.schedules_secret] }}
+          function_secrets: ${{ secrets[steps.extract_secrets.outputs.extra_secret] }}
+          # Individual parameters per function we read from 'function_config.yaml':
           common_folder: ${{ steps.extract_params.outputs.common_folder }}
           function_deploy_timeout: ${{ steps.extract_params.outputs.function_deploy_timeout }}
           post_deploy_cleanup: ${{ steps.extract_params.outputs.post_deploy_cleanup }}
           description: ${{ steps.extract_params.outputs.description }}
           owner: ${{ steps.extract_params.outputs.owner }}
+          cpu: ${{ steps.extract_params.outputs.cpu }}
+          memory: ${{ steps.extract_params.outputs.memory }}
           env_vars: ${{ steps.extract_params.outputs.env_vars }}
-          metadata: ${{ steps.extract_params.outputs.metadata }}
+
