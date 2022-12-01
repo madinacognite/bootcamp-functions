@@ -190,7 +190,7 @@ jobs:
           # Parameters we get from Github secret storage:
           deployment_client_secret: ${{ secrets[steps.extract_secrets.outputs.deployment_secret] }}
           schedules_client_secret: ${{ secrets[steps.extract_secrets.outputs.schedules_secret] }}
-          function_secrets: ${{ secrets[steps.extract_secrets.outputs.extra_secret] }}
+          # function_secrets: ${{ secrets[steps.extract_secrets.outputs.extra_secret] }}
           # Individual parameters per function we read from 'function_config.yaml':
           common_folder: ${{ steps.extract_params.outputs.common_folder }}
           function_deploy_timeout: ${{ steps.extract_params.outputs.function_deploy_timeout }}
