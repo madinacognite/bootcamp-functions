@@ -10,8 +10,9 @@ jobs:
     with:
       deploy_folders: >-
         (
-        "example_function1"
-        "example_function2"
+        "execute_csv_extractor_assets"
+        "execute_csv_extractor_timeseries"
+        "execute_rest_extractor"      
         )
       trigger_deploy_all_folders: >-
         (
