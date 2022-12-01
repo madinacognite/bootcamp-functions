@@ -181,7 +181,7 @@ jobs:
           schedules_tenant_id: 16e3985b-ebe8-4e24-9da4-933e21a9fc81
           cdf_project: bootcamp-03-test
           cdf_cluster: greenfield
-          data_set_id: 3081541885698484
+          data_set_id: 505192792434293
           runtime: py38
           # Parameters we can read/extract automatically:
           function_folder: ${{ matrix.function }}
