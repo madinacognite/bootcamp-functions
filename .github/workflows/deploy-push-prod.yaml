@@ -2,7 +2,7 @@
 name: Deploy Functions to CDF project using OIDC
 on:
   push:
-    branches: [master]
+    branches: [prod]
 
 jobs:
   generate-matrix:
@@ -77,7 +77,7 @@ jobs:
         # if: ${{ contains(needs.generate-matrix.outputs.deploy_folders, matrix.function) }}
         shell: bash
         run: |
-          FILE="${{ matrix.function }}/function_config.yaml"
+          FILE="${{ matrix.function }}/function_config_prod.yaml"
           if [ ! -f $FILE ]; then
               echo "Config: $FILE not supplied!"
           else
@@ -175,13 +175,13 @@ jobs:
         uses: cognitedata/function-action-oidc@v1
         with:
           # Parameters you may likely hardcode here directly:
-          deployment_client_id: 76cbe02f-905b-4ad8-a768-1ad66f105208
+          deployment_client_id: 6344f928-8cb4-4f33-8b79-9740f9cae2a4
           deployment_tenant_id: 16e3985b-ebe8-4e24-9da4-933e21a9fc81
-          schedules_client_id: 76cbe02f-905b-4ad8-a768-1ad66f105208
+          schedules_client_id: 6344f928-8cb4-4f33-8b79-9740f9cae2a4
           schedules_tenant_id: 16e3985b-ebe8-4e24-9da4-933e21a9fc81
-          cdf_project: bootcamp-03-test
+          cdf_project: bootcamp-03-prod
           cdf_cluster: greenfield
-          data_set_id: 505192792434293
+          data_set_id: 5312452466848734
           runtime: py38
           # Parameters we can read/extract automatically:
           function_folder: ${{ matrix.function }}
