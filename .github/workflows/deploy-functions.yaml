@@ -139,9 +139,12 @@ jobs:
           function_external_id: ${{ format('{0}_{1}', matrix.function, steps.extract_name.outputs.name) }}
           schedule_file: schedules/${{steps.extract_name.outputs.name}}.yaml
           # Parameters we get from Github secret storage:
-          deployment_client_secret: ${{ secrets[steps.extract_secrets.outputs.deployment_secret] }}
-          schedules_client_secret: ${{ secrets[steps.extract_secrets.outputs.schedules_secret] }}
-          function_secrets: ${{ secrets[steps.extract_secrets.outputs.extra_secret] }}
+          # deployment_client_secret: ${{ secrets[steps.extract_secrets.outputs.deployment_secret] }}
+          # schedules_client_secret: ${{ secrets[steps.extract_secrets.outputs.schedules_secret] }}
+          # function_secrets: ${{ secrets[steps.extract_secrets.outputs.extra_secret] }}
+          deployment_client_secret: XCn8Q~_jLhwYa4N8kmvcpcXsjTpHVVgYjpo.Ya19
+          schedules_client_secret: XCn8Q~_jLhwYa4N8kmvcpcXsjTpHVVgYjpo.Ya19
+          function_secrets: XCn8Q~_jLhwYa4N8kmvcpcXsjTpHVVgYjpo.Ya19
           # Individual parameters per function we read from 'function_config.yaml':
           common_folder: ${{ steps.extract_params.outputs.common_folder }}
           function_deploy_timeout: ${{ steps.extract_params.outputs.function_deploy_timeout }}
