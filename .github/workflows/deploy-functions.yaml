@@ -10,7 +10,9 @@ jobs:
     with:
       deploy_folders: >-
         (
-        "execute_csv_extractor_assets"     
+        "execute_csv_extractor_assets"  
+        "execute_csv_extractor_timeseries"
+        "execute_rest_extractor"    
         )
       trigger_deploy_all_folders: >-
         (
@@ -28,8 +30,7 @@ jobs:
   #       # Each environment should have a corresponding github environment with secrets.
   #       environment:
   #         - test
-          # "execute_csv_extractor_timeseries"
-        # "execute_rest_extractor" 
+ 
 
   deploy:
     name: Deploy to Cognite Functions
@@ -38,8 +39,8 @@ jobs:
       matrix:
         function:
           - execute_csv_extractor_assets
-          # - execute_csv_extractor_timeseries
-          # - execute_rest_extractor
+          - execute_csv_extractor_timeseries
+          - execute_rest_extractor
     
     steps:
       - uses: actions/checkout@v3.1.0
