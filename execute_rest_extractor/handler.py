@@ -1,4 +1,4 @@
-from common.utilities import sum_integers
+# from common.utilities import sum_integers
 
 import os
 from ice_cream_factory_datapoints_extractor import extractor
